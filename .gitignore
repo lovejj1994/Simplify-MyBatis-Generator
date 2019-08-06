@@ -32,6 +32,3 @@ out/
 
 # Mac
 .DS_Store
-.gitignore
-pom.xml
-src/
