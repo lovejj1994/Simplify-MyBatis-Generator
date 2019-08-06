@@ -1,0 +1,1 @@
+java -jar #{本地路径}\mybatis-generator-core-1.3.7.jar -configfile #{本地路径}\generatorConfig-infra-monitor-monitor.xml
