@@ -5,10 +5,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.Document;
-import org.mybatis.generator.api.dom.xml.TextElement;
-import org.mybatis.generator.api.dom.xml.XmlElement;
+import org.mybatis.generator.api.dom.xml.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -62,6 +59,16 @@ public class SimplifyMapperPlugin extends MapperPlugin {
     }
 
     @Override
+    public boolean sqlMapBaseColumnListElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapBlobColumnListElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        return true;
+    }
+
+    @Override
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
         this.generateSqlBaseColumns(document, introspectedTable);
         return true;
@@ -75,6 +82,21 @@ public class SimplifyMapperPlugin extends MapperPlugin {
      */
     private void generateSqlBaseColumns(Document document, IntrospectedTable introspectedTable) {
         XmlElement rootElement = document.getRootElement();
+
+
+        List<Element> elements = rootElement.getElements();
+        for (Element element : elements) {
+            if (element instanceof XmlElement) {
+                List<Attribute> attributes = ((XmlElement) element).getAttributes();
+                for (Attribute attribute : attributes) {
+                    if ("Base_Column_List".equals(attribute.getValue())) {
+                        return;
+                    }
+                }
+            }
+        }
+
+
         XmlElement sqlElement = new XmlElement("sql");
         Attribute attr = new Attribute("id", "Base_Column_List");
         sqlElement.addAttribute(attr);
@@ -91,5 +113,6 @@ public class SimplifyMapperPlugin extends MapperPlugin {
         rootElement.addElement(new TextElement(""));
         rootElement.addElement(sqlElement);
         rootElement.addElement(new TextElement(""));
+
     }
 }

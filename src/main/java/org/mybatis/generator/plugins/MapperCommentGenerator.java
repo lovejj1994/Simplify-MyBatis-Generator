@@ -60,17 +60,6 @@ public class MapperCommentGenerator implements CommentGenerator {
         return nameBuilder.toString();
     }
 
-    protected void addJavadocTag(JavaElement javaElement, boolean markAsDoNotDelete) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(" * ");
-        sb.append("@mbg.generated");
-        if (markAsDoNotDelete) {
-            sb.append(" do_not_delete_during_merge");
-        }
-
-        javaElement.addJavaDocLine(sb.toString());
-    }
-
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
     }
 
